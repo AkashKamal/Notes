@@ -58,4 +58,13 @@ public class Notes {
     public Date getLastModifiedTime() {
         return lastModifiedTime;
     }
+
+    public void setAddedTime (Date addedTime)
+    {
+        this.addedTime = addedTime;
+    }
+    public void setLastModifiedTime(Date lastModifiedTime)
+    {
+        this.lastModifiedTime = lastModifiedTime;
+    }
 }

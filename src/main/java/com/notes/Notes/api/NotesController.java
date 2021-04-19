@@ -34,4 +34,11 @@ public class NotesController {
     {
         return notesService.getNoteByID(notesId);
     }
+
+    @PostMapping("/api/v1/updateNote")
+    public String updateNote(@RequestBody Notes notes)
+    {
+        notesService.updateNote(notes);
+        return "success";
+    }
 }
