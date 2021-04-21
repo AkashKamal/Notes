@@ -1,8 +1,10 @@
 package com.notes.Notes.service;
 
+import com.notes.Notes.Security.services.UserDetailsImpl;
 import com.notes.Notes.model.Notes;
 import com.notes.Notes.repository.NotesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -20,13 +22,15 @@ public class NotesService {
         long currentMilliSeconds = System.currentTimeMillis();
         Date now = new Date(currentMilliSeconds);
         notes.setAddedTime(now);
+        UserDetailsImpl user = (UserDetailsImpl)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        notes.setUserId(user.getid());
         notesRepository.save(notes);
     }
 
     public List<Notes> getAllNotes()
     {
-
-        return notesRepository.findAll();
+        UserDetailsImpl user = (UserDetailsImpl)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return notesRepository.findNotesByUserId(user.getid());
     }
 
     public Optional<Notes> getNoteByID(long id)

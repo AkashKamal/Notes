@@ -23,6 +23,7 @@ public class Notes {
     private boolean isFavourite;
     private Date addedTime;
     private Date lastModifiedTime;
+    private long userId;
 
     public Notes()
     {
@@ -66,5 +67,13 @@ public class Notes {
     public void setLastModifiedTime(Date lastModifiedTime)
     {
         this.lastModifiedTime = lastModifiedTime;
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userid) {
+        this.userId = userid;
     }
 }
