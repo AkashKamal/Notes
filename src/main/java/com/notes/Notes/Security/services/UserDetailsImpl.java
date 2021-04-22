@@ -13,17 +13,19 @@ public class UserDetailsImpl implements UserDetails {
     private long id;
     private String email;
     private String password;
+    private Users user;
 
-    public UserDetailsImpl(long id, String email, String password) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
+    public UserDetailsImpl(Users user ) {
+        this.id = user.getId();
+        this.email = user.getEmail();
+        this.password = user.getPassword();
+        this.user = user;
     }
 
 
     public static UserDetailsImpl build(Users user)
     {
-        return new UserDetailsImpl(user.getId(),user.getEmail(),user.getPassword());
+        return new UserDetailsImpl(user);
     }
 
     @Override
@@ -63,5 +65,9 @@ public class UserDetailsImpl implements UserDetails {
 
     public long getid (){
         return  this.id;
+    }
+
+    public Users getUser(){
+       return  user;
     }
 }

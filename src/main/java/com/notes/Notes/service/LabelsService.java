@@ -18,8 +18,6 @@ public class LabelsService {
 
     @Autowired
     LabelsRepository labelsRepository;
-    @Autowired
-    UsersRepository usersRepository;
 
     public void addLabel(Labels labels)
     {
@@ -28,7 +26,7 @@ public class LabelsService {
         labels.setAddedTime(now);
         labels.setModifiedTime(now);
         UserDetailsImpl user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        labels.setUser(usersRepository.findById(user.getid()).get());
+        labels.setUser(user.getUser());
         labelsRepository.save(labels);
     }
 
@@ -44,11 +42,10 @@ public class LabelsService {
     {
         labelsRepository.deleteById(labelId);
     }
-    
+
     public List<Labels> getAlLabels()
     {
         UserDetailsImpl user = (UserDetailsImpl)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Optional<Users> userObj = usersRepository.findById(user.getid());
-        return labelsRepository.findLabelsByUser(userObj.get());
+        return labelsRepository.findLabelsByUser(user.getUser());
     }
 }

@@ -18,26 +18,22 @@ public class NotesService {
 
     @Autowired
     NotesRepository notesRepository;
-
-    @Autowired
-    UsersRepository usersRepository;
+    
 
     public void addNotes(Notes notes)
     {
         long currentMilliSeconds = System.currentTimeMillis();
         Date now = new Date(currentMilliSeconds);
         notes.setAddedTime(now);
-        UserDetailsImpl user = (UserDetailsImpl)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Optional<Users> userObj = usersRepository.findById(user.getid());
-        notes.setUser(userObj.get());
+        UserDetailsImpl userDetails = (UserDetailsImpl)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        notes.setUser(userDetails.getUser());
         notesRepository.save(notes);
     }
 
     public List<Notes> getAllNotes()
     {
-        UserDetailsImpl user = (UserDetailsImpl)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Optional<Users> userObj = usersRepository.findById(user.getid());
-        return notesRepository.findNotesByUser(userObj.get());
+        UserDetailsImpl userDetails = (UserDetailsImpl)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return notesRepository.findNotesByUser(userDetails.getUser());
     }
 
     public Optional<Notes> getNoteByID(long id)
