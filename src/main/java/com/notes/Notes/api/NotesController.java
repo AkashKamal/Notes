@@ -41,4 +41,18 @@ public class NotesController {
         notesService.updateNote(notes);
         return "success";
     }
+
+    @PostMapping("/api/v1/addFavourite")
+    public String addFavourite(@RequestBody long  notesId)
+    {
+        notesService.setIsFavourite(notesId);
+        return "success";
+    }
+
+    @PostMapping("/api/v1/removeFavourite")
+    public String removeFavourite(@RequestBody long  notesId)
+    {
+        notesService.removeFavourite(notesId);
+        return "success";
+    }
 }

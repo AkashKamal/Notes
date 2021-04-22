@@ -23,7 +23,14 @@ public class Notes {
     private boolean isFavourite;
     private Date addedTime;
     private Date lastModifiedTime;
-    private long userId;
+    @OneToOne
+    @JoinColumn(name="user_id")
+    private Users user;
+
+
+    @OneToOne
+    @JoinColumn(name="label_id")
+    private Labels labels;
 
     public Notes()
     {
@@ -70,10 +77,28 @@ public class Notes {
     }
 
     public long getUserId() {
-        return userId;
+        return user.getId();
     }
 
-    public void setUserId(long userid) {
-        this.userId = userid;
+    public void setFavourite(boolean favourite) {
+        isFavourite = favourite;
     }
+
+    public boolean getFavourite() {
+        return isFavourite;
+    }
+
+    public void setUser(Users user)
+    {
+        this.user = user;
+    }
+
+    public Labels getLabels() {
+        return labels;
+    }
+
+    public void setLabels(Labels labels) {
+        this.labels = labels;
+    }
+
 }
