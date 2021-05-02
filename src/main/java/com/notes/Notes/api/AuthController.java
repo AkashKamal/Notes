@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
@@ -42,20 +43,26 @@ public class AuthController {
 
     @PostMapping(path = "/signin")
     public ResponseEntity<String> authenticate(@Validated @RequestBody Users user) {
-        //throw new RuntimeException("Some Error has Happened! Contact Support at ***-***");
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
-        JSONObject response = new JSONObject();
-        response.put("jwt",jwt);
-        return ResponseEntity.ok(response.toString());
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = jwtUtils.generateJwtToken(authentication);
+            JSONObject response = new JSONObject();
+            response.put("jwt", jwt);
+            return ResponseEntity.ok(response.toString());
+        }
+        catch (BadCredentialsException e)
+        {
+            JSONObject response = new JSONObject();
+            response.put("ErrorMessage", "Username or password is wrong");
+            return ResponseEntity.badRequest().body(response.toString());
+        }
     }
 
     @PostMapping(path = "/signup")
     public ResponseEntity<?> register(@Validated @RequestBody Users user)
     {
-        logger.debug("inside");
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             return ResponseEntity
                     .badRequest()

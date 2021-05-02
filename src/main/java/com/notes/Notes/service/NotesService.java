@@ -18,13 +18,14 @@ public class NotesService {
 
     @Autowired
     NotesRepository notesRepository;
-    
+
 
     public void addNotes(Notes notes)
     {
         long currentMilliSeconds = System.currentTimeMillis();
         Date now = new Date(currentMilliSeconds);
         notes.setAddedTime(now);
+        notes.setLastModifiedTime(now);
         UserDetailsImpl userDetails = (UserDetailsImpl)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         notes.setUser(userDetails.getUser());
         notesRepository.save(notes);
@@ -46,6 +47,8 @@ public class NotesService {
         long currentMilliSeconds = System.currentTimeMillis();
         Date now = new Date(currentMilliSeconds);
         notes.setLastModifiedTime(now);
+        UserDetailsImpl userDetails = (UserDetailsImpl)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        notes.setUser(userDetails.getUser());
         notesRepository.save(notes);
     }
 
