@@ -37,6 +37,12 @@ public class NotesService {
         return notesRepository.findNotesByUser(userDetails.getUser());
     }
 
+    public List<Notes> getAlFavouritelNotes()
+    {
+        UserDetailsImpl userDetails = (UserDetailsImpl)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return notesRepository.findNotesByUser(userDetails.getUser());
+    }
+
     public Optional<Notes> getNoteByID(long id)
     {
         return notesRepository.findById(id);

@@ -29,6 +29,12 @@ public class NotesController {
         return notesService.getAllNotes();
     }
 
+    @GetMapping("/allFavouriteNotes")
+    public List<Notes> getAllFavNotes()
+    {
+        return notesService.getAllNotes();
+    }
+
     @GetMapping("/notes/{notesId}")
     public Optional<Notes> getNoteById(@PathVariable long notesId)
     {
