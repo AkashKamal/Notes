@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.List;
 
 @Entity(name = "Notes")
 public class Notes {
@@ -23,14 +24,11 @@ public class Notes {
     private boolean isFavourite;
     private Date addedTime;
     private Date lastModifiedTime;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name="user_id")
     private Users user;
 
 
-    @OneToOne
-    @JoinColumn(name="label_id")
-    private Labels labels;
 
     public Notes()
     {
@@ -93,12 +91,10 @@ public class Notes {
         this.user = user;
     }
 
-    public Labels getLabels() {
-        return labels;
+    public Users getUser() {
+        return user;
     }
 
-    public void setLabels(Labels labels) {
-        this.labels = labels;
-    }
+
 
 }
