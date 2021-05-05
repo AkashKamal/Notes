@@ -2,6 +2,7 @@ package com.notes.Notes.api;
 
 import com.notes.Notes.model.Notes;
 import com.notes.Notes.service.NotesService;
+import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,15 +25,15 @@ public class NotesController {
     }
 
     @GetMapping("/allNotes")
-    public List<Notes> getAllNotes()
+    public String getAllNotes()
     {
         return notesService.getAllNotes();
     }
 
     @GetMapping("/allFavouriteNotes")
-    public List<Notes> getAllFavNotes()
+    public String getAllFavNotes()
     {
-        return notesService.getAllNotes();
+        return notesService.getAllFavouriteNotes();
     }
 
     @GetMapping("/notes/{notesId}")

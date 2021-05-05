@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface NotesRepository extends JpaRepository <Notes, Long>{
     List<Notes> findNotesByUser (Users user);
+    List<Notes> findNotesByFavourite (Users users, boolean isFavourite);
 }
