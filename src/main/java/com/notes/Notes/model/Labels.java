@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.List;
 
 @Entity(name = "Labels")
 public class Labels {
@@ -26,6 +27,8 @@ public class Labels {
     private Users user;
     Date addedTime;
     Date modifiedTime;
+    @ManyToMany
+    private List<Notes> notesList;
 
     public  Labels(){
 
@@ -71,5 +74,13 @@ public class Labels {
 
     public void setUser(Users user) {
         this.user = user;
+    }
+
+    public List<Notes> getNotesList() {
+        return notesList;
+    }
+
+    public void setNotesList(List<Notes> notesList) {
+        this.notesList = notesList;
     }
 }
