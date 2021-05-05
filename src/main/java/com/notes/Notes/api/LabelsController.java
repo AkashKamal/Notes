@@ -41,4 +41,10 @@ public class LabelsController {
     {
         return labelsService.getAlLabels();
     }
+
+    @PostMapping("/api/v1/addNoteToLabel")
+    public void addNoteToLabel(@RequestParam(name="labelId", required = true) long labelId, @RequestParam(name="notesId", required = true) long notesId)
+    {
+        labelsService.addNoteToLabel(labelId,notesId);
+    }
 }

@@ -2,9 +2,8 @@ package com.notes.Notes.service;
 
 import com.notes.Notes.Security.services.UserDetailsImpl;
 import com.notes.Notes.model.Labels;
-import com.notes.Notes.model.Users;
+import com.notes.Notes.model.Notes;
 import com.notes.Notes.repository.LabelsRepository;
-import com.notes.Notes.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -18,6 +17,9 @@ public class LabelsService {
 
     @Autowired
     LabelsRepository labelsRepository;
+
+    @Autowired
+    NotesService notesService;
 
     public void addLabel(Labels labels)
     {
@@ -47,5 +49,20 @@ public class LabelsService {
     {
         UserDetailsImpl user = (UserDetailsImpl)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return labelsRepository.findLabelsByUser(user.getUser());
+    }
+
+    public Optional<Labels> getLabelById(long labelId)
+    {
+        return labelsRepository.findById(labelId);
+    }
+
+    public void addNoteToLabel(long labelId,long notesId)
+    {
+        Labels label = getLabelById(labelId).get();
+        Optional<Notes> notes =  notesService.getNoteByID(notesId);
+        Notes note = notes.get();
+        label.getNotesList().add(notes.get());
+        labelsRepository.save(label);
+
     }
 }

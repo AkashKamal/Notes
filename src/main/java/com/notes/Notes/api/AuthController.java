@@ -1,6 +1,5 @@
 package com.notes.Notes.api;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.notes.Notes.Security.jwt.JwtUtils;
 import com.notes.Notes.model.Users;
 import com.notes.Notes.repository.UsersRepository;
