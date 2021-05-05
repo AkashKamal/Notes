@@ -49,16 +49,16 @@ public class NotesController {
     }
 
     @PostMapping("/api/v1/addFavourite")
-    public String addFavourite(@RequestBody Notes  note)
+    public String addFavourite(@RequestParam (name="notesId", required = true) long notesId)
     {
-        notesService.setIsFavourite(note.getId());
+        notesService.setIsFavourite(notesId);
         return "success";
     }
 
     @PostMapping("/api/v1/removeFavourite")
-    public String removeFavourite(@RequestBody Notes  note)
+    public String removeFavourite(@RequestParam (name="notesId", required = true) long notesId)
     {
-        notesService.removeFavourite(note.getId());
+        notesService.removeFavourite(notesId);
         return "success";
     }
 }
