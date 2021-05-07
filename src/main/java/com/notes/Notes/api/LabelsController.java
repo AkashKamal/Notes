@@ -47,4 +47,9 @@ public class LabelsController {
     {
         labelsService.addNoteToLabel(labelId,notesId);
     }
+
+    @GetMapping("/api/v1/label/getNotes")
+    public String getNotesOfLabel(@RequestParam(name="labelId", required = true) long labelId){
+        return labelsService.getNotesOfLabels(labelId);
+    }
 }

@@ -40,7 +40,7 @@ public class NotesService {
     public String getAllFavouriteNotes()
     {
         UserDetailsImpl userDetails = (UserDetailsImpl)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        List<Notes> notesList = notesRepository.findNotesByFavourite(userDetails.getUser(), Boolean.TRUE);
+        List<Notes> notesList = notesRepository.findNotesByUserAndIsFavourite(userDetails.getUser(), Boolean.TRUE);
         return NotesUtil.convertNotesListToJson(notesList).toString();
     }
 
