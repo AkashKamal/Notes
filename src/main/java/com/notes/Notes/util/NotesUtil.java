@@ -12,8 +12,8 @@ public class NotesUtil {
     public static JSONArray convertNotesListToJson(List<Notes> notesList)
     {
         JSONArray notesArray = new JSONArray();
-        JSONObject notesObject = new JSONObject();
         notesList.stream().forEach(notes -> {
+            JSONObject notesObject = new JSONObject();
             notesObject.put("id",notes.getId());
             notesObject.put("title",notes.getTitle());
             notesObject.put("content",notes.getContent());
