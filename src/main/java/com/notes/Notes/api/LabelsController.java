@@ -52,4 +52,11 @@ public class LabelsController {
     public String getNotesOfLabel(@RequestParam(name="labelId", required = true) long labelId){
         return labelsService.getNotesOfLabels(labelId);
     }
+
+    @DeleteMapping("/api/v1/label/deleteLabel")
+    public String delteLabel(@RequestParam(name="lableId", required = true)long labelId)
+    {
+        labelsService.deleteLabel(labelId);
+        return "success";
+    }
 }

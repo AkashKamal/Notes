@@ -62,4 +62,11 @@ public class NotesController {
         notesService.removeFavourite(notesId);
         return "success";
     }
+
+    @DeleteMapping("/api/v1/deleteNote")
+    public String deleteNote(@RequestParam(name="notesId",required = true)long notesId)
+    {
+        notesService.deleteNote(notesId);
+        return "success";
+    }
 }

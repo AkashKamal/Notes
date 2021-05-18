@@ -19,6 +19,7 @@ public class NotesUtil {
             notesObject.put("content",notes.getContent());
             notesObject.put("addedTime",notes.getAddedTime());
             notesObject.put("modifiedTime",notes.getLastModifiedTime());
+            notesObject.put("favourite",notes.getFavourite());
             notesArray.put(notesObject);
         });
         return notesArray;
