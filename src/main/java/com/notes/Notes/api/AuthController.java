@@ -63,9 +63,11 @@ public class AuthController {
     public ResponseEntity<?> register(@Validated @RequestBody Users user)
     {
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+            JSONObject response = new JSONObject();
+            response.put("ErrorMessage", "Username is already taken!");
             return ResponseEntity
                     .badRequest()
-                    .body("Error: Username is already taken!");
+                    .body(response);
         }
 
         Users newUser = new Users(user.getEmail(),encoder.encode(user.getPassword()));
