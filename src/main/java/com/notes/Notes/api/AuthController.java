@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -55,7 +56,7 @@ public class AuthController {
         }
         catch (BadCredentialsException e)
         {
-           throw new AuthorizationException(ErrorCode.INVALID_CREDENTIALS);
+           throw new AuthorizationException(ErrorCode.INVALID_CREDENTIALS, HttpStatus.FORBIDDEN);
         }
     }
 
@@ -63,7 +64,7 @@ public class AuthController {
     public ResponseEntity<?> register(@Validated @RequestBody Users user) throws AuthorizationException
     {
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
-           throw new AuthorizationException(ErrorCode.USER_EXISTS);
+           throw new AuthorizationException(ErrorCode.USER_EXISTS,HttpStatus.BAD_REQUEST);
         }
 
         Users newUser = new Users(user.getEmail(),encoder.encode(user.getPassword()));

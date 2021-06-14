@@ -16,23 +16,9 @@ public class ExceptionResponseHandler extends ResponseEntityExceptionHandler {
 
 
     @ExceptionHandler({APIException.class,AuthorizationException.class})
-    public final ResponseEntity<ExceptionResponse> handleBadRequestException(APIException ex, WebRequest req) {
+    public final ResponseEntity<String> handleBadRequestException(APIException ex, WebRequest req) {
 
             ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(), ex.getCode());
-            return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler({APIException.class,AuthorizationException.class})
-    public final ResponseEntity<ExceptionResponse> handleAccessDeniedException(APIException ex, WebRequest req) {
-
-        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(), ex.getCode());
-        return new ResponseEntity<>(exceptionResponse, HttpStatus.FORBIDDEN);
-    }
-    @ExceptionHandler({APIException.class,AuthorizationException.class})
-    public final ResponseEntity<ExceptionResponse> handleAllExceptions(APIException ex, WebRequest req) {
-
-        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(), ex.getCode());
-        return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
-
+            return new ResponseEntity<>(exceptionResponse.toString(), HttpStatus.BAD_REQUEST);
     }
 }
