@@ -1,6 +1,8 @@
 package com.notes.Notes.api;
 
 import com.notes.Notes.Security.jwt.JwtUtils;
+import com.notes.Notes.exception.AuthorizationException;
+import com.notes.Notes.exception.ErrorCode;
 import com.notes.Notes.model.Users;
 import com.notes.Notes.repository.UsersRepository;
 import org.json.JSONObject;
@@ -41,7 +43,7 @@ public class AuthController {
 
 
     @PostMapping(path = "/signin")
-    public ResponseEntity<String> authenticate(@Validated @RequestBody Users user) {
+    public ResponseEntity<String> authenticate(@Validated @RequestBody Users user) throws AuthorizationException {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
@@ -53,21 +55,15 @@ public class AuthController {
         }
         catch (BadCredentialsException e)
         {
-            JSONObject response = new JSONObject();
-            response.put("ErrorMessage", "Username or password is wrong");
-            return ResponseEntity.badRequest().body(response.toString());
+           throw new AuthorizationException(ErrorCode.INVALID_CREDENTIALS);
         }
     }
 
     @PostMapping(path = "/signup")
-    public ResponseEntity<?> register(@Validated @RequestBody Users user)
+    public ResponseEntity<?> register(@Validated @RequestBody Users user) throws AuthorizationException
     {
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
-            JSONObject response = new JSONObject();
-            response.put("ErrorMessage", "Username is already taken!");
-            return ResponseEntity
-                    .badRequest()
-                    .body(response);
+           throw new AuthorizationException(ErrorCode.USER_EXISTS);
         }
 
         Users newUser = new Users(user.getEmail(),encoder.encode(user.getPassword()));
