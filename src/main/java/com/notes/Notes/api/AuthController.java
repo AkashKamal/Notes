@@ -56,7 +56,7 @@ public class AuthController {
         }
         catch (BadCredentialsException e)
         {
-           throw new AuthorizationException(ErrorCode.INVALID_CREDENTIALS, HttpStatus.FORBIDDEN);
+           throw new AuthorizationException(ErrorCode.INVALID_CREDENTIALS);
         }
     }
 
@@ -64,7 +64,7 @@ public class AuthController {
     public ResponseEntity<?> register(@Validated @RequestBody Users user) throws AuthorizationException
     {
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
-           throw new AuthorizationException(ErrorCode.USER_EXISTS,HttpStatus.BAD_REQUEST);
+           throw new AuthorizationException(ErrorCode.USER_EXISTS);
         }
 
         Users newUser = new Users(user.getEmail(),encoder.encode(user.getPassword()));
