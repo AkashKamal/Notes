@@ -1,11 +1,12 @@
 package com.notes.Notes.service;
 
 import com.notes.Notes.Security.services.UserDetailsImpl;
+import com.notes.Notes.exception.APIException;
+import com.notes.Notes.exception.ErrorCode;
 import com.notes.Notes.model.Labels;
 import com.notes.Notes.model.Notes;
 import com.notes.Notes.repository.LabelsRepository;
 import com.notes.Notes.util.NotesUtil;
-import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -31,7 +32,7 @@ public class LabelsService {
         labels.setModifiedTime(now);
         UserDetailsImpl user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         labels.setUser(user.getUser());
-        labelsRepository.save(labels);
+        Labels addedLabel = labelsRepository.save(labels);
     }
 
     public void updateLabel(Labels label)
@@ -53,24 +54,31 @@ public class LabelsService {
         return labelsRepository.findLabelsByUser(user.getUser());
     }
 
-    public Optional<Labels> getLabelById(long labelId)
+    public Labels getLabelById(long labelId) throws Exception
     {
-        return labelsRepository.findById(labelId);
+        Optional<Labels> label= labelsRepository.findById(labelId);
+        if(label.isPresent())
+        {
+            return label.get();
+        }
+        else{
+            throw new APIException(ErrorCode.LABEL_NOT_FOUND);
+        }
     }
 
-    public void addNoteToLabel(long labelId,long notesId)
+    public void addNoteToLabel(long labelId,long notesId) throws Exception
     {
-        Labels label = getLabelById(labelId).get();
-        Optional<Notes> notes =  notesService.getNoteByID(notesId);
-        Notes note = notes.get();
-        label.getNotesList().add(notes.get());
+        Labels label = getLabelById(labelId);
+        Notes note =  notesService.getNoteByID(notesId);
+        label.getNotesList().add(note);
         labelsRepository.save(label);
     }
 
-    public String getNotesOfLabels(long labelId)
+    public String getNotesOfLabels(long labelId) throws Exception
     {
-        Labels label = getLabelById(labelId).get();
+        Labels label = getLabelById(labelId);
         List<Notes> notesList = label.getNotesList();
         return NotesUtil.convertNotesListToJson(notesList).toString();
     }
+
 }

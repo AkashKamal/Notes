@@ -1,8 +1,8 @@
 package com.notes.Notes.api;
 
+import com.notes.Notes.model.Labels;
 import com.notes.Notes.model.Notes;
 import com.notes.Notes.service.NotesService;
-import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,7 +37,7 @@ public class NotesController {
     }
 
     @GetMapping("/notes/{notesId}")
-    public Optional<Notes> getNoteById(@PathVariable long notesId)
+    public Notes getNoteById(@PathVariable long notesId) throws Exception
     {
         return notesService.getNoteByID(notesId);
     }

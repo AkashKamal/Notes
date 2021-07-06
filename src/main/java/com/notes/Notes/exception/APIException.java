@@ -7,14 +7,18 @@ public class APIException extends Exception {
 
     int code;
     HttpStatus httpStatus;
-    public APIException(ErrorCode errorCode, HttpStatus httpStatus)
+    public APIException(ErrorCode errorCode)
     {
         super(errorCode.getMessage());
         this.code = errorCode.getCode();
-        this.httpStatus = httpStatus;
+        this.httpStatus = errorCode.getHttpStatus();
     }
 
     public int getCode() {
         return code;
+    }
+
+    public HttpStatus getHttpStatus(){
+        return this.httpStatus;
     }
 }

@@ -29,13 +29,6 @@ public class LabelsController {
         return "success";
     }
 
-    @PostMapping("/api/v1/deleteLabel")
-    public String deleteLabel(@RequestBody long labelId)
-    {
-        labelsService.deleteLabel(labelId);
-        return "success";
-    }
-
     @GetMapping("/api/v1/getAllLabels")
     public List<Labels> getAllLabels()
     {
@@ -43,20 +36,21 @@ public class LabelsController {
     }
 
     @PostMapping("/api/v1/addNoteToLabel")
-    public void addNoteToLabel(@RequestParam(name="labelId", required = true) long labelId, @RequestParam(name="notesId", required = true) long notesId)
+    public void addNoteToLabel(@RequestParam(name="labelId", required = true) long labelId, @RequestParam(name="notesId", required = true) long notesId) throws Exception
     {
         labelsService.addNoteToLabel(labelId,notesId);
     }
 
     @GetMapping("/api/v1/label/getNotes")
-    public String getNotesOfLabel(@RequestParam(name="labelId", required = true) long labelId){
+    public String getNotesOfLabel(@RequestParam(name="labelId", required = true) long labelId) throws Exception{
         return labelsService.getNotesOfLabels(labelId);
     }
 
     @DeleteMapping("/api/v1/label/deleteLabel")
-    public String delteLabel(@RequestParam(name="lableId", required = true)long labelId)
+    public String delteLabel(@RequestParam(name="labelId", required = true)long labelId)
     {
         labelsService.deleteLabel(labelId);
         return "success";
     }
+
 }

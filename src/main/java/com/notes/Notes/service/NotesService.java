@@ -1,6 +1,9 @@
 package com.notes.Notes.service;
 
 import com.notes.Notes.Security.services.UserDetailsImpl;
+import com.notes.Notes.exception.APIException;
+import com.notes.Notes.exception.ErrorCode;
+import com.notes.Notes.model.Labels;
 import com.notes.Notes.model.Notes;
 import com.notes.Notes.repository.NotesRepository;
 import com.notes.Notes.util.NotesUtil;
@@ -44,9 +47,16 @@ public class NotesService {
         return NotesUtil.convertNotesListToJson(notesList).toString();
     }
 
-    public Optional<Notes> getNoteByID(long id)
+    public Notes getNoteByID(long id) throws Exception
     {
-        return notesRepository.findById(id);
+        Optional<Notes> note = notesRepository.findById(id);
+        if(note.isPresent())
+        {
+            return note.get();
+        }
+        else{
+            throw new APIException(ErrorCode.NOTE_NOT_FOUND);
+        }
     }
 
     public void updateNote(Notes notes)
@@ -80,8 +90,28 @@ public class NotesService {
         notesRepository.save(notes.get());
     }
 
+    public void moveToTrash(long notesId)
+    {
+        Optional<Notes> notes = notesRepository.findById(notesId);
+        notes.get().setTrashed(true);
+        notesRepository.save(notes.get());
+    }
+
+    public void restoreFromTrash(long notesId)
+    {
+        Optional<Notes> notes = notesRepository.findById(notesId);
+        notes.get().setTrashed(false);
+        notesRepository.save(notes.get());
+    }
+
     public void deleteNote(long notesId){
         notesRepository.deleteById(notesId);
+    }
+
+    public List<Labels> getLabelsList(long notesId)
+    {
+        Optional<Notes> notes = notesRepository.findById(notesId);
+        return notes.get().getLabelsList();
     }
 
 }

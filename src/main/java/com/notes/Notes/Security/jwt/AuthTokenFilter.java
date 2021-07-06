@@ -1,8 +1,11 @@
 package com.notes.Notes.Security.jwt;
 
 import com.notes.Notes.Security.services.UserDetailsImpl;
+import com.notes.Notes.exception.AuthorizationException;
+import com.notes.Notes.exception.ErrorCode;
 import com.notes.Notes.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,18 +33,29 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
-        String jwt = parseJwt(httpServletRequest);
-        if(jwt!=null && jwtUtils.validateJWTToken(jwt))
-        {
-            String userMail = jwtUtils.getUserMailFromJWTToken(jwt);
-            UserDetails userDetails = userDetailsService.loadUserByUsername(userMail);
-            UsernamePasswordAuthenticationToken authentication =  new UsernamePasswordAuthenticationToken(
-                    userDetails,null,userDetails.getAuthorities()
-            );
-            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+        try {
+            String jwt = parseJwt(httpServletRequest);
+            if (jwt != null && jwt != "null" ) {
+                if (jwtUtils.validateJWTToken(jwt)) {
+                    String userMail = jwtUtils.getUserMailFromJWTToken(jwt);
+                    UserDetails userDetails = userDetailsService.loadUserByUsername(userMail);
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                            userDetails, null, userDetails.getAuthorities()
+                    );
+                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+            }
+
+            filterChain.doFilter(httpServletRequest, httpServletResponse);
         }
-        filterChain.doFilter(httpServletRequest, httpServletResponse);
+        catch (AuthorizationException e)
+        {
+            httpServletResponse.setContentType("application/json");
+            httpServletResponse.setStatus(e.getCode());
+            httpServletResponse.getWriter().write(e.getMessage().toString());
+        }
+
     }
 
     private String parseJwt(HttpServletRequest request)

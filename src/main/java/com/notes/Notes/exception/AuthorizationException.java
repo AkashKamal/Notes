@@ -4,9 +4,9 @@ import org.springframework.http.HttpStatus;
 
 public class AuthorizationException extends APIException {
 
-    public AuthorizationException(ErrorCode errorCode, HttpStatus httpStatus)
+    public AuthorizationException(ErrorCode errorCode)
     {
-      super(errorCode,httpStatus);
+      super(errorCode);
     }
 
 }
